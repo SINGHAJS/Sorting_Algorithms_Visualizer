@@ -77,8 +77,8 @@ async function selectionSort() {
 }
 
 async function bubbleSort() {
-  // let bars = document.getElementsByClassName("bar");
-  let bars = document.querySelectorAll(".bar");
+  let bars = document.getElementsByClassName("bar");
+  // let bars = document.querySelectorAll(".bar");
 
   for (let i = 0; i < ARRAY_LENGTH; i++) {
     for (let j = 0; j < ARRAY_LENGTH - i - 1; j++) {
@@ -86,7 +86,7 @@ async function bubbleSort() {
         let temp = initArray[j];
         initArray[j] = initArray[j + 1];
         initArray[j + 1] = temp;
-        bars[j].style.height = `${initArray[j] - 100}%`;
+        bars[j].style.height = `${initArray[j]}%`;
         bars[j].style.backgroundColor = "green";
         bars[j].innerHTML = initArray[j];
 
