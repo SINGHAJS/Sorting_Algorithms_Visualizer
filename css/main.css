@@ -14,7 +14,7 @@
 .main-header {
   display: flex;
   flex-direction: column;
-  gap: 5rem;
+  gap: 3rem;
   background-color: black;
   text-align: center;
   padding: 1rem;
@@ -61,7 +61,7 @@
 
 .button {
   width: 10rem;
-  height: 5rem;
+  height: 3.5rem;
   border-radius: 1rem;
   border-style: none;
 }
@@ -91,4 +91,9 @@
 .details-header {
   color: white;
   font-size: 1.1rem;
+}
+
+#footer {
+  color: white;
+  font-size: 1rem;
 }
