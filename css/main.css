@@ -41,17 +41,17 @@
   background-image: linear-gradient(to top left, #db6d1a 0%, #98360f 100%);
 }
 
+#buttons-container {
+  display: flex;
+  gap: 1rem;
+}
+
 .button {
   width: 10rem;
   height: 5rem;
   border-style: none;
 }
 
-/* .button:link,
-.button:visited {
-  text-decoration: none;
-  transition: all 0.3s;
-} */
 .button:active,
 .button:hover {
   transition: 1s;
