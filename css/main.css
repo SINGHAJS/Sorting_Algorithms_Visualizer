@@ -64,14 +64,14 @@
   height: 3.5rem;
   border-radius: 1rem;
   border-style: none;
+  border: white 1px solid;
 }
 
 .button:active,
 .button:hover {
   transition: 1s;
-  transform: none;
+  text-decoration: none;
   background-color: var(--background-color-primary);
-  border: white 1px solid;
   color: white;
 }
 
