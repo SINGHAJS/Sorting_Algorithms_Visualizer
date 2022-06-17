@@ -1,10 +1,11 @@
-const ARRAY_LENGTH = 20;
+const ARRAY_LENGTH = 25;
 let initArray = new Array(ARRAY_LENGTH);
-const bar = document.querySelector(".Bar");
 const displayContainer = document.getElementById("progress-display");
 const resetBtn = document.getElementById("reset");
 const bubbleSortBtn = document.getElementById("bubble-sort");
 const selectionSortBtn = document.getElementById("selection-sort");
+const comparisonsEl = document.getElementById("total-comparisons");
+const timeTakenEl = document.getElementById("time-taken");
 
 function generateRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -26,10 +27,12 @@ function createBars(array) {
   }
 }
 
-const resetArray = () => {
+const reset = () => {
   fillArray(initArray);
   displayContainer.innerHTML = "";
   createBars(initArray);
+  comparisonsEl.innerHTML = "0";
+  timeTakenEl.innerHTML = "0 ms";
 };
 
 function sleep(time) {
@@ -41,7 +44,10 @@ async function selectionSort() {
   let bars = document.querySelectorAll(".bar");
   let min_num = 0;
   let min_num_index = 0;
+  let comparisons = 0;
 
+  let startTime = window.performance.now();
+  let endTime = 0;
   for (let i = 0; i < ARRAY_LENGTH - 1; i++) {
     // set minimum number (min_num) to the array value at index i
     // set the minimum number index value (min_num_index)
@@ -55,9 +61,12 @@ async function selectionSort() {
         // change the min_num value to the next index value
         min_num = initArray[j];
         min_num_index = j;
+        comparisons++;
       }
+      comparisonsEl.innerHTML = comparisons;
+      endTime = window.performance.now();
+      timeTakenEl.innerHTML = `${Math.floor(endTime - startTime)} ms`;
     }
-    // await sleep(100);
 
     // swap
     // change the current index value to the new minimum number (min_num)
@@ -66,19 +75,19 @@ async function selectionSort() {
     initArray[i] = min_num;
 
     bars[min_num_index].style.height = `${initArray[i]}%`;
-    bars[min_num_index].style.backgroundColor = "green";
     bars[min_num_index].innerHTML = initArray[i];
 
     bars[i].style.height = `${initArray[i]}%`;
-    bars[i].style.backgroundColor = "green";
     bars[i].innerHTML = initArray[i];
-    await sleep(100);
+    await sleep(50);
   }
 }
 
 async function bubbleSort() {
-  let bars = document.getElementsByClassName("bar");
-  // let bars = document.querySelectorAll(".bar");
+  let bars = document.querySelectorAll(".bar");
+  let comparisons = 0;
+  let startTime = window.performance.now();
+  let endTime = 0;
 
   for (let i = 0; i < ARRAY_LENGTH; i++) {
     for (let j = 0; j < ARRAY_LENGTH - i - 1; j++) {
@@ -87,16 +96,18 @@ async function bubbleSort() {
         initArray[j] = initArray[j + 1];
         initArray[j + 1] = temp;
         bars[j].style.height = `${initArray[j]}%`;
-        bars[j].style.backgroundColor = "green";
         bars[j].innerHTML = initArray[j];
 
         bars[j + 1].style.height = `${initArray[j + 1]}%`;
-        bars[j + 1].style.backgroundColor = "green";
         bars[j + 1].innerHTML = initArray[j + 1];
-        await sleep(100);
+        comparisons++;
+        comparisonsEl.innerHTML = comparisons;
+        endTime = window.performance.now();
+        timeTakenEl.innerHTML = `${Math.floor(endTime - startTime)} ms`;
+        await sleep(50);
       }
     }
-    await sleep(100);
+    await sleep(50);
   }
 }
 
@@ -106,6 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
   createBars();
 });
 
-resetBtn.addEventListener("click", resetArray);
+resetBtn.addEventListener("click", reset);
 bubbleSortBtn.addEventListener("click", bubbleSort);
 selectionSortBtn.addEventListener("click", selectionSort);

@@ -1,22 +1,33 @@
-:root {
-  --background-color-primary: linear-gradient(
-    to top left,
-    #e03c00 0%,
-    #12899c 100%
-  );
-  --background-color-secondary: rgba(255, 255, 255, 0.35);
-}
 * {
   margin: 0;
   padding: 0;
   box-sizing: inherit;
 }
 
+#main-container {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+.main-header {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  background-color: black;
+  text-align: center;
+  padding: 1rem;
+}
+
+.main-heading {
+  color: white;
+}
+
 #content-main {
   height: 100vh;
   width: 100%;
   display: flex;
-  background-image: var(--background-color-primary);
   justify-content: center;
   align-items: center;
   gap: 5rem;
@@ -24,7 +35,6 @@
 }
 
 #progress-display {
-  background-color: var(--background-color-secondary);
   width: 75%;
   height: 50%;
   display: flex;
@@ -38,24 +48,47 @@
   color: white;
   width: 3%;
   height: 90%;
-  background-image: linear-gradient(to top left, #db6d1a 0%, #98360f 100%);
+  background-color: black;
 }
 
 #buttons-container {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
 }
 
 .button {
   width: 10rem;
   height: 5rem;
+  border-radius: 1rem;
   border-style: none;
 }
 
 .button:active,
 .button:hover {
   transition: 1s;
+  transform: none;
   background-color: var(--background-color-primary);
-  border: black 1px solid;
+  border: white 1px solid;
   color: white;
+}
+
+#algo-details {
+  background-color: black;
+  width: 40rem;
+  height: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.details-header {
+  color: white;
+  font-size: 1.1rem;
 }

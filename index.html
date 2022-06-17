@@ -10,12 +10,25 @@
     <title>Sorting Visualizer</title>
   </head>
   <body>
-    <div id="content-main">
-      <div id="progress-display"></div>
-      <div id="buttons-container">
-        <button id="reset" class="button">RESET</button>
-        <button id="bubble-sort" class="button">BUBBLE SORT</button>
-        <button id="selection-sort" class="button">SELECTION SORT</button>
+    <div id="main-container">
+      <div class="main-header">
+        <h1 class="main-heading">Sorting Algorithms Visualizer</h1>
+        <div id="buttons-container">
+          <button id="reset" class="button">RESET</button>
+          <button id="bubble-sort" class="button">BUBBLE SORT</button>
+          <button id="selection-sort" class="button">SELECTION SORT</button>
+        </div>
+      </div>
+      <div id="content-main">
+        <div id="progress-display"></div>
+        <div id="algo-details">
+          <p class="details-header">
+            Comparisons: <span id="total-comparisons">0</span>
+          </p>
+          <p class="details-header">
+            Time Taken: <span id="time-taken">0 ms </span>
+          </p>
+        </div>
       </div>
     </div>
   </body>
