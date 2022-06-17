@@ -69,7 +69,7 @@
 
 .button:active,
 .button:hover {
-  transition: 1s;
+  transition: 0.3s;
   text-decoration: none;
   background-color: var(--background-color-primary);
   color: white;
