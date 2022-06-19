@@ -4,9 +4,12 @@ const displayContainer = document.getElementById("progress-display");
 const resetBtn = document.getElementById("reset");
 const comparisonsEl = document.getElementById("total-comparisons");
 const timeTakenEl = document.getElementById("time-taken");
-const bubbleSortBtn = document.getElementById("bubble-sort");
 const selectionSortBtn = document.getElementById("selection-sort");
+const insertionSortBtn = document.getElementById("insertion-sort");
+const bubbleSortBtn = document.getElementById("bubble-sort");
 const mergeSortBtn = document.getElementById("merge-sort");
+const quickSortBtn = document.getElementById("quick-sort");
+const binSortBtn = document.getElementById("bin-sort");
 
 /*********************************************************************************************************************
  * Methods To Create Array, Bars, UI, Sleep, and Reset
@@ -72,6 +75,12 @@ function sleep(time) {
  * Sorting Algorithms
  *********************************************************************************************************************/
 
+function markAsSorted(bars) {
+  for (let k = 0; k < bars.length; k++) {
+    bars[k].style.backgroundColor = "green";
+  }
+}
+
 async function selectionSort() {
   // variable initialization
   let bars = document.querySelectorAll(".bar");
@@ -119,9 +128,30 @@ async function selectionSort() {
     await sleep(50);
   }
 
-  for (let k = 0; k < bars.length; k++) {
-    bars[k].style.backgroundColor = "green";
+  markAsSorted(bars);
+}
+
+async function insertionSort() {
+  let bars = document.querySelectorAll(".bar");
+  for (let i = 0; i < initArray.length; i++) {
+    let current = initArray[i];
+    // bars[i].style.height = `${initArray[i]}%`;
+    let j = i - 1;
+    while (j >= 0 && initArray[j] > current) {
+      initArray[j + 1] = initArray[j];
+      bars[j + 1].style.height = `${initArray[j]}%`;
+      bars[j + 1].innerHTML = initArray[j];
+      bars[j + 1].style.backgroundColor = "red";
+      j--;
+      await sleep(50);
+      bars[j + 1].style.backgroundColor = "black";
+    }
+    initArray[j + 1] = current;
+    bars[j + 1].style.height = `${current}%`;
+    bars[j + 1].innerHTML = current;
   }
+
+  markAsSorted(bars);
 }
 
 /**
@@ -160,9 +190,7 @@ async function bubbleSort() {
       bars[j + 1].style.backgroundColor = "black";
     }
   }
-  for (let k = 0; k < bars.length; k++) {
-    bars[k].style.backgroundColor = "green";
-  }
+  markAsSorted(bars);
 }
 
 function mergeSortMain() {
@@ -219,6 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 resetBtn.addEventListener("click", reset);
-bubbleSortBtn.addEventListener("click", bubbleSort);
 selectionSortBtn.addEventListener("click", selectionSort);
+insertionSortBtn.addEventListener("click", insertionSort);
+bubbleSortBtn.addEventListener("click", bubbleSort);
 mergeSortBtn.addEventListener("click", mergeSortMain);
