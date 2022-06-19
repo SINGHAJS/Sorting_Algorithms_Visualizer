@@ -1,19 +1,28 @@
-const ARRAY_LENGTH = 25;
+/**
+ * Sorting Algorithm Visualizer
+ *      @author Ajit Singh
+ *
+ */
+
+/* array initialization */
+const ARRAY_LENGTH = 80;
 let initArray = new Array(ARRAY_LENGTH);
+
+/* containers */
 const displayContainer = document.getElementById("progress-display");
-const resetBtn = document.getElementById("reset");
+
+/* elements */
 const comparisonsEl = document.getElementById("total-comparisons");
 const timeTakenEl = document.getElementById("time-taken");
+
+/* buttons */
 const selectionSortBtn = document.getElementById("selection-sort");
 const insertionSortBtn = document.getElementById("insertion-sort");
 const bubbleSortBtn = document.getElementById("bubble-sort");
 const mergeSortBtn = document.getElementById("merge-sort");
 const quickSortBtn = document.getElementById("quick-sort");
 const binSortBtn = document.getElementById("bin-sort");
-
-/*********************************************************************************************************************
- * Methods To Create Array, Bars, UI, Sleep, and Reset
- *********************************************************************************************************************/
+const resetBtn = document.getElementById("reset");
 
 /**
  * Generate a random integer between min and max.
@@ -45,7 +54,6 @@ function createBars(array) {
     let bar = document.createElement("div");
     bar.classList.add("bar");
     bar.style.height = `${initArray[i]}%`;
-    bar.innerHTML = initArray[i];
     displayContainer.appendChild(bar);
   }
 }
@@ -55,11 +63,11 @@ function createBars(array) {
  * the comparisons and time taken elements
  */
 const reset = () => {
-  fillArray(initArray);
   displayContainer.innerHTML = "";
-  createBars(initArray);
   comparisonsEl.innerHTML = "0";
   timeTakenEl.innerHTML = "0 ms";
+  fillArray(initArray);
+  createBars(initArray);
 };
 
 /**
@@ -71,182 +79,267 @@ function sleep(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-/*********************************************************************************************************************
- * Sorting Algorithms
- *********************************************************************************************************************/
-
+/**
+ * It takes in an array of bars and changes their background color to green
+ * @param bars - The array of bars that are being sorted.
+ */
 function markAsSorted(bars) {
   for (let k = 0; k < bars.length; k++) {
     bars[k].style.backgroundColor = "green";
   }
 }
 
+/**
+ * It takes a time in milliseconds and sets the timeTakenEl element's innerHTML to the time in
+ * milliseconds
+ * @param time - The time taken to sort the array in milliseconds.
+ */
 function setTimeTaken(time) {
   timeTakenEl.innerHTML = `${time} ms`;
 }
 
+/**
+ * It takes a value, and sets the innerHTML of the comparisonsEl element to that value
+ * @param value - The value to set the comparisons to.
+ */
 function setComparisons(value) {
   comparisonsEl.innerHTML = value;
 }
 
+/*********************************************************************************************************************
+ * Sorting Algorithms
+ *********************************************************************************************************************/
+/**
+ * Selection Sort Algorithm
+ */
 async function selectionSort() {
-  // variable initialization
-  let bars = document.querySelectorAll(".bar");
-  let min_num = 0;
-  let min_num_index = 0;
+  // initialization
+  const bars = document.querySelectorAll(".bar");
+  let minNum = 0;
+  let minNumIndex = 0;
   let comparisons = 0;
-
   let startTime = window.performance.now();
   let endTime = 0;
-  for (let i = 0; i < ARRAY_LENGTH - 1; i++) {
-    // set minimum number (min_num) to the array value at index i
-    // set the minimum number index value (min_num_index)
-    min_num = initArray[i];
-    min_num_index = i;
 
-    // check and compare number values of current index (i) and next index (i + 1)
+  for (let i = 0; i < ARRAY_LENGTH - 1; i++) {
+    // set minimum number to the array value at index i
+    // set the minimum number index to that value
+    minNum = initArray[i];
+    minNumIndex = i;
+
+    // check and compare number values of current index and next index
     for (let j = i + 1; j < ARRAY_LENGTH; j++) {
-      if (initArray[j] < min_num) {
+      if (initArray[j] < minNum) {
         // if the next index value is smaller than the current index value
-        // change the min_num value to the next index value
-        min_num = initArray[j];
-        min_num_index = j;
-        comparisons++;
+        // change the minNum value to the next index value
+        minNum = initArray[j];
+        minNumIndex = j;
+        // setting the positions and colors of the bars
         bars[j].style.backgroundColor = "red";
+        // settings time of the algorithm
+        endTime = window.performance.now();
+        setTimeTaken(Math.floor(endTime - startTime));
+        // setting the comparisons value of the algorithm
+        setComparisons(++comparisons);
       }
-      comparisonsEl.innerHTML = comparisons;
-      endTime = window.performance.now();
-      timeTakenEl.innerHTML = `${Math.floor(endTime - startTime)} ms`;
     }
 
     // swap
-    // change the current index value to the new minimum number (min_num)
+    // change the current index value to the new minimum number (minNum)
     // change the next index value to the current index value
-    initArray[min_num_index] = initArray[i];
-    initArray[i] = min_num;
+    initArray[minNumIndex] = initArray[i];
+    initArray[i] = minNum;
 
-    bars[min_num_index].style.height = `${initArray[i]}%`;
-    bars[min_num_index].innerHTML = initArray[i];
-    bars[min_num_index].style.backgroundColor = "green";
-
+    // setting the positions and colors of the bars
+    bars[minNumIndex].style.height = `${initArray[i]}%`;
+    bars[minNumIndex].style.backgroundColor = "green";
     bars[i].style.height = `${initArray[i]}%`;
-    bars[i].innerHTML = initArray[i];
     bars[i].style.backgroundColor = "green";
 
     await sleep(50);
   }
 
-  markAsSorted(bars);
-}
-
-async function insertionSort() {
-  let bars = document.querySelectorAll(".bar");
-  let comparisons = 0;
-  let startTime = window.performance.now();
-  let endTime = 0;
-
-  for (let i = 0; i < initArray.length; i++) {
-    let current = initArray[i];
-    // bars[i].style.height = `${initArray[i]}%`;
-    let j = i - 1;
-    while (j >= 0 && initArray[j] > current) {
-      initArray[j + 1] = initArray[j];
-      bars[j + 1].style.height = `${initArray[j]}%`;
-      bars[j + 1].innerHTML = initArray[j];
-      bars[j + 1].style.backgroundColor = "red";
-      j--;
-      await sleep(50);
-      bars[j + 1].style.backgroundColor = "black";
-      comparisons++;
-      endTime = window.performance.now();
-      setTimeTaken(Math.floor(endTime - startTime));
-      setComparisons(comparisons);
-    }
-    initArray[j + 1] = current;
-    bars[j + 1].style.height = `${current}%`;
-    bars[j + 1].innerHTML = current;
-  }
-
+  // marking as sorted
   markAsSorted(bars);
 }
 
 /**
- * The bubbleSort function is responsible for sorting the bars in ascending order.
+ * Insertion Sort Algorithm
  */
-async function bubbleSort() {
-  /* This is declaring variables that will be used in the bubbleSort function. */
-  let bars = document.querySelectorAll(".bar");
-  let comparisons = 0;
+async function insertionSort() {
+  // initialization
+  const bars = document.querySelectorAll(".bar");
   let startTime = window.performance.now();
   let endTime = 0;
+  let comparisons = 0;
+
+  for (let i = 0; i < initArray.length; i++) {
+    // settings the value of j to the current index i - 1
+    let j = i - 1;
+    // storing the value of the array at i to the current variable
+    let current = initArray[i];
+    // setting the bars of the color
+    bars[i].style.backgroundColor = "red";
+
+    // iterating until the j is >= 0 and the value of the array at j is greater than the current value
+    while (j >= 0 && initArray[j] > current) {
+      // setting the value of the initArray at j + 1 to the value at i
+      initArray[j + 1] = initArray[j];
+      // setting the height and color of the bars
+      bars[j + 1].style.height = `${initArray[j]}%`;
+      bars[j + 1].style.backgroundColor = "red";
+      j--;
+
+      await sleep(5);
+
+      // setting the time taken of the algorithm
+      endTime = window.performance.now();
+      setTimeTaken(Math.floor(endTime - startTime));
+      // setting the comparisons value of the algorithm
+      setComparisons(++comparisons);
+    }
+
+    //setting the value of the initArray at index j+1 to the current value
+    initArray[j + 1] = current;
+    // setting the height of the bar accordingly
+    bars[j + 1].style.height = `${current}%`;
+  }
+
+  // marking as sorted
+  markAsSorted(bars);
+}
+
+/**
+ * Bubble Sort Algorithm
+ */
+async function bubbleSort() {
+  // variable initialization
+  const bars = document.querySelectorAll(".bar");
+  let startTime = window.performance.now();
+  let endTime = 0;
+  let comparisons = 0;
 
   for (let i = 0; i < ARRAY_LENGTH; i++) {
     for (let j = 0; j < ARRAY_LENGTH - i - 1; j++) {
-      /* This is the code that is responsible for the swapping of the bars. */
       if (initArray[j] > initArray[j + 1]) {
+        // swapping if the value at index j is greater than index j+1
         let temp = initArray[j];
         initArray[j] = initArray[j + 1];
         initArray[j + 1] = temp;
+        // setting the height and color of the bar
         bars[j].style.height = `${initArray[j]}%`;
-        bars[j].innerHTML = initArray[j];
         bars[j].style.backgroundColor = "red";
-
         bars[j + 1].style.height = `${initArray[j + 1]}%`;
-        bars[j + 1].innerHTML = initArray[j + 1];
         bars[j + 1].style.backgroundColor = "red";
-        comparisonsEl.innerHTML = comparisons;
+
+        // setting the time taken for the algorithm
         endTime = window.performance.now();
-        timeTakenEl.innerHTML = `${Math.floor(endTime - startTime)} ms`;
-        /* This is a function that is used to pause the execution of the code for a certain amount of
-        time. */
-        comparisons++;
-        await sleep(50);
+        setTimeTaken(Math.floor(endTime - startTime));
+        // setting the comparison value of the algorithm
+        setComparisons(++comparisons);
+        await sleep(10);
       }
+      // setting the background of the bars back to black
       bars[j].style.backgroundColor = "black";
       bars[j + 1].style.backgroundColor = "black";
     }
   }
+
+  // marking as sorted
   markAsSorted(bars);
 }
 
-function mergeSortMain() {
-  // mergeSort(initArray);
-  console.log(initArray);
-}
-
-// function mergeSort(array) {
-//   if (array.length <= 1) return;
-//   let middle = Math.floor(array.length / 2);
-//   let leftArr = array.splice(0, middle);
-//   let rightArr = array.splice(middle);
-
-//   mergeSort(leftArr);
-//   mergeSort(rightArr);
-//   merge(leftArr, rightArr);
+// async function mergeSortMain() {
+//   mergeSort(initArray.sort(), 0, ARRAY_LENGTH - 1);
+//   console.log(initArray);
 // }
 
-// function merge(leftArr, rightArr) {
-//   let lengthLeft = initArray.length / 2;
-//   let lengthRight = initArray.length - lengthLeft;
-//   let i = 0,
-//     j = 0,
-//     k = 0;
+// async function mergeSort(array, indexLeft, indexRight) {
+//   if (indexLeft >= indexRight) {
+//     return;
+//   }
 
+//   let middle = indexLeft + Math.floor((indexRight - indexLeft) / 2);
+//   mergeSort(array, indexLeft, middle);
+//   mergeSort(array, middle + 1, indexRight);
+//   merge(array, indexLeft, middle, indexRight);
+// }
+
+// async function merge(array, leftIndex, middle, rightIndex) {
+//   // initialization
+//   const bars = document.querySelectorAll(".bar");
+//   let lengthLeft = middle - leftIndex + 1;
+//   let lengthRight = rightIndex - middle;
+//   let comparison = 0;
+//   let startTime = window.performance.now();
+//   let endTime = 0;
+
+//   // temp left and right arrays
+//   let leftArray = new Array(lengthLeft);
+//   let rightArray = new Array(lengthRight);
+
+//   // populating left array
+//   for (let i = 0; i < lengthLeft; i++) {
+//     leftArray[i] = array[leftIndex + i];
+//   }
+
+//   // populating right array
+//   for (let j = 0; j < lengthRight; j++) {
+//     rightArray[j] = array[middle + 1 + j];
+//   }
+
+//   let i = 0;
+//   let j = 0;
+//   let k = leftIndex;
+
+//   // merging left and right arrays
 //   while (i < lengthLeft && j < lengthRight) {
-//     if (leftArr[i] <= rightArr[j]) {
-//       initArray[k++] = leftArr[i++];
+//     setComparisons(++comparison);
+//     // if the value at left array is smaller than the value at right array,
+//     // then the value at the left array is stored in the given array at the kth index
+//     if (leftArray[i] <= rightArray[j]) {
+//       array[k] = leftArray[i];
+//       // setting the height and color of the bars
+//       bars[k].style.height = `${leftArray[i]}%`;
+//       bars[k].style.backgroundColor = "green";
+//       i++;
 //     } else {
-//       initArray[k++] = rightArr[j++];
+//       // if the value at the left array is greater than the value at the right array,
+//       // then the value at the right array is stored at in the given array at the kth index
+//       array[k] = rightArray[j];
+//       // setting the height and color of the bars
+//       bars[k].style.height = `${rightArray[j]}%`;
+//       bars[k].style.backgroundColor = "green";
+//       j++;
 //     }
+
+//     await sleep(100);
+
+//     k++;
 //   }
 
+//   // storing the remaining values from the left array
 //   while (i < lengthLeft) {
-//     initArray[k++] = leftArr[i++];
+//     array[k] = leftArray[i];
+//     // setting the height and color of the bars
+//     bars[k].style.height = `${leftArray[i]}%`;
+//     bars[k].style.backgroundColor = "green";
+//     i++;
+//     k++;
 //   }
 
+//   // storing the remaining values from the right array
 //   while (j < lengthRight) {
-//     initArray[k++] = rightArr[j++];
+//     array[k] = rightArray[j];
+//     // setting the height and color of the bars
+//     bars[k].style.height = `${rightArray[j]}%`;
+//     bars[k].style.backgroundColor = "green";
+//     j++;
+//     k++;
 //   }
+
+//   endTime = window.performance.now();
+//   setTimeTaken(Math.floor(endTime - startTime));
 // }
 
 /*********************************************************************************************************************
@@ -266,4 +359,5 @@ resetBtn.addEventListener("click", reset);
 selectionSortBtn.addEventListener("click", selectionSort);
 insertionSortBtn.addEventListener("click", insertionSort);
 bubbleSortBtn.addEventListener("click", bubbleSort);
-mergeSortBtn.addEventListener("click", mergeSortMain);
+// mergeSortBtn.addEventListener("click", mergeSortMain);
+// quickSortBtn.addEventListener("click", quickSortMain);
