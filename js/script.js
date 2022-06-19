@@ -81,6 +81,14 @@ function markAsSorted(bars) {
   }
 }
 
+function setTimeTaken(time) {
+  timeTakenEl.innerHTML = `${time} ms`;
+}
+
+function setComparisons(value) {
+  comparisonsEl.innerHTML = value;
+}
+
 async function selectionSort() {
   // variable initialization
   let bars = document.querySelectorAll(".bar");
@@ -133,6 +141,10 @@ async function selectionSort() {
 
 async function insertionSort() {
   let bars = document.querySelectorAll(".bar");
+  let comparisons = 0;
+  let startTime = window.performance.now();
+  let endTime = 0;
+
   for (let i = 0; i < initArray.length; i++) {
     let current = initArray[i];
     // bars[i].style.height = `${initArray[i]}%`;
@@ -145,6 +157,10 @@ async function insertionSort() {
       j--;
       await sleep(50);
       bars[j + 1].style.backgroundColor = "black";
+      comparisons++;
+      endTime = window.performance.now();
+      setTimeTaken(Math.floor(endTime - startTime));
+      setComparisons(comparisons);
     }
     initArray[j + 1] = current;
     bars[j + 1].style.height = `${current}%`;
@@ -178,12 +194,12 @@ async function bubbleSort() {
         bars[j + 1].style.height = `${initArray[j + 1]}%`;
         bars[j + 1].innerHTML = initArray[j + 1];
         bars[j + 1].style.backgroundColor = "red";
-        comparisons++;
         comparisonsEl.innerHTML = comparisons;
         endTime = window.performance.now();
         timeTakenEl.innerHTML = `${Math.floor(endTime - startTime)} ms`;
         /* This is a function that is used to pause the execution of the code for a certain amount of
         time. */
+        comparisons++;
         await sleep(50);
       }
       bars[j].style.backgroundColor = "black";
